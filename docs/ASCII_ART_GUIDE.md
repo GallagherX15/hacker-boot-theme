@@ -1,41 +1,41 @@
-# 💀 Guía de Arte ASCII para Bootloaders: Cómo crearlos, encontrarlos y evitar errores
+# 💀 Guía de Arte ASCII para Bootloaders: Creación, Búsqueda y Alineación Geométrica
 
-Tunear el bootloader con arte ASCII (calaveras, logos cyberpunk, espadas o banners con tu nickname) le da un aspecto increíble a tu máquina. Pero si alguna vez intentaste poner arte ASCII en una imagen con un script o editor, seguro te topaste con dos problemas clásicos:
-1. **La calavera o el dibujo te queda torcido / chueco.**
-2. **Las letras del banner se juntan y quedan como un bloque ilegible de caracteres raros.**
+Personalizar el cargador de arranque con arte ASCII (calaveras, emblemas cyberpunk o tipografías con tu nombre) le da una estética única al equipo. No obstante, al intentar plasmar arte ASCII en una imagen mediante scripts o herramientas gráficas, suelen ocurrir dos fallos comunes:
+1. **La calavera o el dibujo queda torcido o desalineado.**
+2. **Las letras del banner se juntan y forman un bloque ilegible de símbolos.**
 
-Acá te explico por qué pasa esto y cómo resolverlo fácilmente.
+A continuación se detalla por qué suceden estos fenómenos y cómo resolverlos de manera precisa.
 
 ---
 
 ## 🔍 Dónde buscar y cómo generar Arte ASCII
 
-Hay dos tipos de arte ASCII que vas a necesitar:
+Existen dos categorías principales de arte ASCII:
 
-### 1. Banners de Texto (Tu Nickname / Nombre)
-Para convertir texto normal a letras gigantes ASCII:
-* **Web (Recomendado):** Entrá a [TAAG (Text to ASCII Art Generator)](https://patorjk.com/software/taag/).
-  * Fuentes recomendadas con estética hacker:
-    * `Bloody` (letras góticas con efecto de goteo de sangre).
-    * `Slant` (inclinada clásica de la demoscene).
-    * `Mono12` / `Block` (bloques sólidos limpios).
-    * `Graffiti` / `Doom` / `Cyberlarge`.
-* **Desde la Terminal (Linux):**
-  Instalá `toilet` y `figlet`:
+### 1. Banners de Texto (Nombres y Títulos)
+Para convertir texto convencional en letras estilizadas de gran tamaño:
+* **Generador en línea recomendado:** Utiliza [TAAG (Text to ASCII Art Generator)](https://patorjk.com/software/taag/).
+  * Fuentes recomendadas con estética cyberpunk/hacker:
+    * `Bloody` (letras con efecto gótico de goteo).
+    * `Slant` (diseño inclinado clásico de terminal).
+    * `Mono12` / `Block` (bloques sólidos limpios y de alta visibilidad).
+    * `Future` / `Cyberlarge`.
+* **Desde la terminal en Linux:**
+  Instala los paquetes `toilet` y `figlet`:
   ```bash
   sudo pacman -S figlet toilet
   ```
-  Probá diferentes estilos:
+  Puedes probar diferentes fuentes directamente:
   ```bash
   toilet -f mono12 -w 120 "TUNOMBRE"
   toilet -f future -w 120 "TUNOMBRE"
   figlet -f slant "TUNOMBRE"
   ```
 
-### 2. Dibujos e Íconos (Calaveras, Logos, etc.)
-* **[ASCII Art Archive](https://www.asciiart.eu/)**: El catálogo más grande de arte ASCII libre (categorías: skulls, dragons, cyber, gaming).
-* **Convertir cualquier imagen PNG a ASCII:**
-  Podés usar herramientas CLI como `chafa` o `jp2a`:
+### 2. Ilustraciones e Íconos (Calaveras, Logos y Gráficos)
+* **[ASCII Art Archive](https://www.asciiart.eu/)**: Catálogo extenso de arte en texto libre (secciones recomendadas: skulls, dragons, cyber, gaming).
+* **Conversión de imágenes a texto:**
+  Herramientas como `chafa` permiten transformar archivos PNG o JPG en secuencias ASCII/ANSI:
   ```bash
   sudo pacman -S chafa
   chafa --format=symbols --size=60x30 mi_imagen.png
@@ -43,12 +43,12 @@ Para convertir texto normal a letras gigantes ASCII:
 
 ---
 
-## ⚠️ El Error de la "Calavera Torcida" (Y por qué se desalinea)
+## ⚠️ El Problema del Dibujo Torcido (Y por qué se pierde la simetría)
 
-### ¿Qué causa el error?
-Muchos scripts para generar fondos hacen lo siguiente:
+### Origen del fallo:
+Muchos scripts cometen el error de centrar el texto línea por línea:
 ```python
-# ❌ ERROR COMÚN: Centrar línea por línea independientemente
+# ❌ ERROR COMÚN: Centrar cada línea de forma individual
 for line in ascii_art_lines:
     bbox = draw.textbbox((0, 0), line, font=font)
     line_width = bbox[2] - bbox[0]
@@ -56,15 +56,15 @@ for line in ascii_art_lines:
     y += line_height
 ```
 
-**Por qué esto rompe todo:**
-En el arte ASCII, las líneas tienen diferentes cantidades de espacios al principio (` `) y al final.
-Si centrás cada línea de forma individual según su propio ancho visible, el ojo izquierdo de la calavera se va a correr 20 píxeles para un lado, la mandíbula para el otro y los cuernos van a quedar desparejos.
+**Por qué esto deforma la imagen:**
+En el arte ASCII, las líneas contienen cantidades variables de espacios en blanco al inicio (` `).
+Si se calcula el centro de cada línea en función de su propio ancho visible, las líneas más cortas se desplazarán hacia el centro relativo y las más largas hacia los extremos. Como resultado, elementos simétricos (ojos, mandíbula, alas) quedan completamente descuadrados.
 
-### ✅ La Solución: Centrar el BLOQUE COMPLETO
-Tenés que calcular el ancho máximo de la línea más ancha del bloque, y usar **el mismo punto X de inicio para todas las líneas**:
+### ✅ La Solución Correcta: Centrado del BLOQUE COMPLETO
+Se debe calcular el ancho máximo considerando la línea más extensa del bloque y fijar **la misma coordenada X de inicio para todas las líneas**:
 
 ```python
-# ✔️ FORMA CORRECTA: Anclar todo el bloque a un mismo X
+# ✔️ MÉTODO CORRECTO: Usar un punto X de anclaje uniforme
 max_block_width = 0
 for line in ascii_art_lines:
     bbox = draw.textbbox((0, 0), line, font=font)
@@ -72,40 +72,40 @@ for line in ascii_art_lines:
     if w > max_block_width:
         max_block_width = w
 
-# X de inicio único para todo el bloque
+# Coordenada X única para todo el conjunto
 start_x = (1920 - max_block_width) // 2
 
 for line in ascii_art_lines:
     draw.text((start_x, y), line, fill=color, font=font)
     y += line_height
 ```
-De esta manera, la simetría original de la calavera se mantiene intacta al 100%.
+Con este enfoque, la geometría y proporciones originales se conservan intactas al 100%.
 
 ---
 
-## ⚠️ El Error de las Letras Pegadas (Como pasó con `GHERX`)
+## ⚠️ El Problema de Caracteres Amontonados (Colisión tipográfica)
 
-Si usás fuentes con caracteres sombreados densos como `░`, `▒`, `▓` y `█` (muy común en la fuente *Bloody* o *Dripping*):
-* Si las letras no tienen un margen uniforme de 1 o 2 espacios entre sí, los caracteres de una letra se tocan con los de la siguiente.
-* Al renderizarse en pantalla, el ojo humano no puede distinguir dónde termina la `G` y dónde empieza la `H`, quedando un manchón rojo incomprensible.
+Al utilizar tipografías que emplean caracteres densos de semitono o bloque (`░`, `▒`, `▓`, `█`):
+* Si las matrices de cada letra no cuentan con un margen lateral de 1 o 2 espacios, los bordes de caracteres adyacentes colisionan.
+* Al renderizarse en la pantalla de inicio, las letras pierden su silueta y el texto se vuelve incomprensible.
 
 ### ✅ La Solución:
-Cuando definas o copies letras ASCII compuestas, asegurate de que cada matriz de letra tenga el mismo ancho y agregale siempre un espacio separador uniforme:
+Al componer palabras con matrices ASCII, es indispensable garantizar que cada carácter cuente con dimensiones proporcionales y un margen uniforme constante:
 
 ```python
-# Cada letra es una lista de 6 líneas con padding garantizado
+# Definición de letras con matriz uniforme y padding
 G = ["  ▄████  ", " ██▒ ▀█▒ ", "▒██░▄▄▄░ ", "░▓█  ██▓░", "░▒▓███▀▒ ", " ░▒   ▒  "]
 A = [" ▄▄▄     ", "▒████▄   ", "▒██  ▀█▄ ", "░██▄▄▄▄██", " ▓█   ▓██", " ▒▒   ▓▒█"]
-# ...
-# Al concatenar, dejamos siempre 1 espacio de separación
+
+# Al concatenar caracteres, se agrega una separación fija
 for row in range(6):
     banner_lines[row] += letra[row] + "  "
 ```
 
 ---
 
-## 📐 La Regla de Oro: Tipografía Monospace Obligatoria
+## 📐 Regla Obligatoria: Fuente Monospace
 
-El arte ASCII depende de que **cada carácter ocupe exactamente el mismo ancho de píxeles**. 
-* Si usás una tipografía proporcional (Arial, Roboto, Inter, etc.), los espacios ocupan 4px y las letras 12px, por lo que las columnas se descuajeringan por completo.
-* Usá **siempre** fuentes monoespaciadas. La mejor recomendación para este tema es **JetBrains Mono Nerd Font** (`JetBrainsMonoNerdFontMono-Bold.ttf`).
+Todo arte ASCII requiere estrictamente una **tipografía monoespaciada** (Monospace).
+* En una fuente proporcional (como Arial o Roboto), un espacio ocupa mucho menos ancho que un carácter alfabético, lo que destruye la alineación de columnas.
+* Se recomienda utilizar fuentes profesionales como **JetBrains Mono Nerd Font** (`JetBrainsMonoNerdFontMono-Bold.ttf`) para máxima nitidez y compatibilidad.

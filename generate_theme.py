@@ -163,7 +163,7 @@ def interactive_mode():
     print("=" * 60)
     print("  CYBERPUNK RED GRUB THEME - GENERADOR VIBE CODING")
     print("=" * 60)
-    print("Vamos a armar tu imagen de fondo en 10 segundos.\n")
+    print("Vamos a crear tu imagen de fondo en 10 segundos.\n")
 
     nickname = input("1. Tu Nick / Nombre para el banner (default: GALLAGHERX): ").strip()
     if not nickname:
@@ -173,7 +173,7 @@ def interactive_mode():
     print("  [1] bloody  (Letras sangrantes/góticas con goteo - Recomendado)")
     print("  [2] mono12  (Bloques limpios y sólidos)")
     print("  [3] future  (Estilo futurista)")
-    style_choice = input("Elegí estilo [1/2/3] (default: 1): ").strip()
+    style_choice = input("Elige estilo [1/2/3] (default: 1): ").strip()
     style_map = {"1": "bloody", "2": "mono12", "3": "future"}
     selected_style = style_map.get(style_choice, "bloody")
 
@@ -198,7 +198,7 @@ def interactive_mode():
         style=selected_style
     )
     print("\nListo! El nuevo 'background.png' quedó guardado en la carpeta 'grub/'.")
-    print("Ahora podés correr './install.sh' para aplicarlo al sistema.")
+    print("Ahora puedes ejecutar './install.sh' para aplicarlo al sistema.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generador de fondos para GRUB estilo Hacker")

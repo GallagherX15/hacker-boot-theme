@@ -88,7 +88,7 @@ if [ -x "/etc/grub.d/15_uki" ]; then
     echo "[i] DETECCIÓN DE ENTRADAS DUPLICADAS:"
     echo "    Se detectó que '/etc/grub.d/15_uki' está activo."
     echo "    Si en tu menú de GRUB te aparecen dos o tres 'Arch Linux' iguales,"
-    echo "    es porque 15_uki duplica las entradas de UKI. Podés desactivarlo con:"
+    echo "    es porque 15_uki duplica las entradas de UKI. Puedes desactivarlo con:"
     echo "    sudo chmod -x /etc/grub.d/15_uki"
     echo ""
 fi
