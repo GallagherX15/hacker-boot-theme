@@ -1,0 +1,53 @@
+# GallagherX Hacker GRUB Theme
+title-text: ""
+desktop-image: "background.png"
+desktop-color: "#000000"
+
+terminal-font: "JetBrains Mono Bold 14"
+
+# Boot menu
++ boot_menu {
+    left = 25%
+    width = 50%
+    top = 735
+    height = 190
+    item_font = "JetBrains Mono Bold 16"
+    item_color = "#881515"
+    selected_item_font = "JetBrains Mono Bold 16"
+    selected_item_color = "#ff2525"
+    selected_item_pixmap_style = "select_*.png"
+    icon_height = 0
+    icon_width = 0
+    item_height = 38
+    item_padding = 5
+    item_icon_space = 0
+    item_spacing = 6
+    scrollbar = false
+}
+
+# Timeout progress bar
++ progress_bar {
+    id = "__timeout__"
+    left = 35%
+    top = 945
+    height = 14
+    width = 30%
+    font = "JetBrains Mono Bold 12"
+    text_color = "#aa2020"
+    fg_color = "#dd1111"
+    bg_color = "#200000"
+    border_color = "#660000"
+    text = "@TIMEOUT_NOTIFICATION_LONG@"
+}
+
+# Help text at the bottom
++ label {
+    top = 980
+    left = 0
+    width = 100%
+    height = 20
+    text = "[▲/▼] Seleccionar SO  |  [ENTER] Iniciar  |  [E] Opciones"
+    align = "center"
+    font = "JetBrains Mono Bold 12"
+    color = "#771111"
+}

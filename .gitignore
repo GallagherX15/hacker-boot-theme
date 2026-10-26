@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+
+# OS / Backups
+.DS_Store
+*.bak
+*.tmp
+*~
+
+# Test outputs
+test_*.png
+output_*.png
